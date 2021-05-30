@@ -1,0 +1,55 @@
+-20.2595,-43.8014
+-20.2595,-43.8014
+-20.2595,-43.8013
+-20.2595,-43.8013
+-20.2595,-43.8013
+-20.2595,-43.8012
+-20.2595,-43.8013
+-20.2594,-43.8016
+-20.2594,-43.8013
+-20.2593,-43.8011
+-20.2590,-43.8011
+0.0000,0.0000
+-20.2592,-43.8010
+-20.2593,-43.8010
+-20.2594,-43.8011
+-20.2594,-43.8010
+-20.2594,-43.8011
+-20.2594,-43.8011
+-20.2594,-43.8011
+-20.2594,-43.8011
+-20.2594,-43.8011
+-20.2594,-43.8011
+-20.2593,-43.8010
+-20.2595,-43.8011
+-20.2597,-43.8010
+-20.2592,-43.8006
+-20.2587,-43.8013
+-20.2583,-43.8027
+-20.2579,-43.8030
+-20.2572,-43.8020
+-20.2566,-43.8015
+-20.2560,-43.8013
+-20.2554,-43.8004
+-20.2547,-43.8004
+-20.2538,-43.8018
+-20.2531,-43.8028
+-20.2526,-43.8020
+-20.2521,-43.8019
+-20.2518,-43.8019
+-20.2518,-43.8020
+-20.2518,-43.8020
+-20.2518,-43.8021
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/serial/serialposix.py", line 501, in read
+    'device reports readiness to read but returned no data '
+serial.serialutil.SerialException: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "workspace/pyapps/gpstest3.py", line 10, in <module>
+    data=ser.readline()
+  File "/usr/lib/python3/dist-packages/serial/serialposix.py", line 509, in read
+    raise SerialException('read failed: {}'.format(e))
+serial.serialutil.SerialException: read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)

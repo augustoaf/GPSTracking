@@ -3,3 +3,5 @@ config/
 *.pem
 .vscode
 coordinates.txt
+*.xlsx
+*.csv

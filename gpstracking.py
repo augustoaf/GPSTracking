@@ -11,6 +11,8 @@ def convert_to_degrees(raw_value):
     degrees = int(decimal_value)
     mm_mmmm = (decimal_value - int(decimal_value))/0.6
     position = degrees + mm_mmmm
+    #fix added by Augusto
+    position = position * -1
     position = "%.4f" %(position)
     return position
 
@@ -22,6 +24,7 @@ def write_to_file(is_new_file, content):
         file = open(file_name, "w")
     else:
         file = open(file_name, "a")
+    content = content + "\n"
     file.write(content)
     file.close()
     print(content)    
@@ -55,14 +58,14 @@ try:
                 
                 #write GPS coordinates in a file
                 current_date_and_time = datetime.datetime.now()
-                content = str(current_date_and_time) + ",-" + latitude + ",-" + longitude + "\n"
-                write_to_file(False, content) 
-                
-                time.sleep(30)
+                content = str(current_date_and_time) + "," + latitude + "," + longitude 
+                write_to_file(False, content)
+                time.sleep(15)
         except Exception as e:
             #print(f"Logging exception as str: {e}")
             error = f"Logging exception as repr: {e!r}"
             write_to_file(False, error)
+            time.sleep(5)
 
 except KeyboardInterrupt:
     sys.exit(0)

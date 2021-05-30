@@ -1,4 +1,3 @@
-#read GPS coordinates using pynmea2 lib (pip3 install pynmea2)
 import serial
 import time
 import string
@@ -8,12 +7,16 @@ while True:
 	port="/dev/ttyS0"
 	ser=serial.Serial(port, baudrate=9600, timeout=0.5)
 	dataout = pynmea2.NMEAStreamReader()
-	newdata=ser.readline()
+	data=ser.readline()
 
+	newdata=data.decode('utf-8')
 	if newdata[0:6] == "$GPRMC":
+
+		#print("inside")
 		newmsg=pynmea2.parse(newdata)
-		lat=newmsg.latitude
-		lng=newmsg.longitude
-		gps = "Latitude=" + str(lat) + "and Longitude=" + str(lng)
+		lat="%.4f" %(newmsg.latitude)
+		lng="%.4f" %(newmsg.longitude)
+		gps = str(lat) + "," + str(lng)
 		print(gps)
+		time.sleep(15)
 
