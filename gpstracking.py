@@ -2,6 +2,7 @@ import serial
 import time
 import datetime
 import sys
+import paho.mqtt.client as mqtt 
 
 serial_port = serial.Serial ("/dev/ttyS0")
 gpgga_info = "$GPGGA,"
@@ -28,10 +29,32 @@ def write_to_file(is_new_file, content):
     file.write(content)
     file.close()
     print(content)    
-    
-try:
-    write_to_file(True, "")
 
+def instantiate_mqtt_client():
+    client = ""
+    try:
+        broker_address="192.168.86.42"        
+        client = mqtt.Client("id-1")
+        client.connect(broker_address, port=1883, keepalive=20)
+    except Exception as e:
+        error = f"MQTT Client: Logging exception as repr: {e!r}"
+        write_to_file(False, error)
+            
+    return client
+
+def send_message(mqtt_client, payload):
+    if not isinstance(mqtt_client, str):
+        try:
+            broker_topic = "satellite/gps"
+            mqtt_client.publish(broker_topic,payload)
+        except Exception as e:
+            error = f"MQTT Publish: Logging exception as repr: {e!r}"
+            write_to_file(False, error)
+
+try:
+    write_to_file(True, "")#create an empty log file
+    mqtt_client = instantiate_mqtt_client()
+            
     while True:
         try:
             #read NMEA string received
@@ -53,17 +76,17 @@ try:
                 latitude = convert_to_degrees(latitude)
                 longitude = (float)(nmea_longitude)
                 longitude = convert_to_degrees(longitude)
-                
-                #print("NMEA Time: ", nmea_time,"\n")
-                
+                               
                 #write GPS coordinates in a file
                 current_date_and_time = datetime.datetime.now()
                 content = str(current_date_and_time) + "," + latitude + "," + longitude 
                 write_to_file(False, content)
+                #publish mqtt message
+                send_message(mqtt_client, content)
+
                 time.sleep(15)
         except Exception as e:
-            #print(f"Logging exception as str: {e}")
-            error = f"Logging exception as repr: {e!r}"
+            error = f"GPS Coordinates: Logging exception as repr: {e!r}"
             write_to_file(False, error)
             time.sleep(5)
 
