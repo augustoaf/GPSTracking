@@ -95,12 +95,11 @@ try:
                     longitude = convert_to_degrees(longitude)
                                 
                     #write GPS coordinates in a file
-                    current_date_and_time = datetime.datetime.now()
-                    content = str(current_date_and_time) + "," + nmea_time + "," + latitude + "," + longitude 
-                    write_coordinates_to_file(False, content)
-                    write_gga_to_file(False, str(current_date_and_time) + "," + received_data)
+                    formatted_content = str(datetime.datetime.now()) + "," + nmea_time + "," + latitude + "," + longitude 
+                    write_coordinates_to_file(False, formatted_content)
+                    write_gga_to_file(False, received_data)
                     #publish mqtt message
-                    send_message(mqtt_client, content)
+                    send_message(mqtt_client, formatted_content)
                     date_to_wait = datetime.datetime.now() + datetime.timedelta(0,15)
         except Exception as e:
             error = f"GPS Coordinates: Logging exception as repr: {e!r}"
