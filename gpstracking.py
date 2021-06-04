@@ -18,12 +18,16 @@ def convert_to_degrees(raw_value):
     return position
 
 def write_coordinates_to_file(is_new_file, content):
-    file_name = "coordinates.txt"
+    file_name = "coordinates.log"
     write_to_file(is_new_file, content, file_name) 
 
 def write_gga_to_file(is_new_file, content):
-    file_name = "gga.txt"
+    file_name = "gga.log"
     write_to_file(is_new_file, content, file_name)
+
+def write_error_to_file(is_new_file, content):
+    file_name = "error.log"
+    write_to_file(is_new_file, content, file_name) 
 
 def write_to_file(is_new_file, content, file_name):
     file = ""
@@ -45,7 +49,7 @@ def instantiate_mqtt_client():
         client.connect(broker_address, port=1883, keepalive=20)
     except Exception as e:
         error = f"MQTT Client: Logging exception as repr: {e!r}"
-        write_to_file(False, error)
+        write_error_to_file(False, error)
             
     return client
 
@@ -56,11 +60,13 @@ def send_message(mqtt_client, payload):
             mqtt_client.publish(broker_topic,payload)
         except Exception as e:
             error = f"MQTT Publish: Logging exception as repr: {e!r}"
-            write_to_file(False, error)
+            write_error_to_file(False, error)
 
 try:
-    write_coordinates_to_file(True, "")#create an empty log file
-    write_gga_to_file(True, "")#create an empty log file
+    write_coordinates_to_file(True, "")#create an empty coordinates log file
+    write_gga_to_file(True, "")#create an empty gga log file
+    write_error_to_file(True, "")#create an empty error log file
+
     mqtt_client = instantiate_mqtt_client()
     date_to_wait = datetime.datetime.now()
 
@@ -98,7 +104,7 @@ try:
                     date_to_wait = datetime.datetime.now() + datetime.timedelta(0,15)
         except Exception as e:
             error = f"GPS Coordinates: Logging exception as repr: {e!r}"
-            write_coordinates_to_file(False, error)
+            write_error_to_file(False, error)
             date_to_wait = datetime.datetime.now() + datetime.timedelta(0,5)
             
 except KeyboardInterrupt:
