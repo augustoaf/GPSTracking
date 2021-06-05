@@ -18,8 +18,10 @@ def convert_to_degrees(raw_value):
     return position
 
 def write_coordinates_to_file(is_new_file, content):
-    file_name = "coordinates.log"
+    file_name = "coordinates.csv"
     write_to_file(is_new_file, content, file_name) 
+    if is_new_file:
+        write_to_file(False, "current_date_time,nmea_time,nmea_lat,nmea_long", file_name)
 
 def write_gga_to_file(is_new_file, content):
     file_name = "gga.log"

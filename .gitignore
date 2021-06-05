@@ -6,3 +6,4 @@ config/
 *.xlsx
 *.csv
 test.py
+*.log
