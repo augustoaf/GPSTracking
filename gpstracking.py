@@ -49,6 +49,7 @@ def instantiate_mqtt_client():
         broker_address="192.168.86.42"        
         client = mqtt.Client("id-1")
         client.connect(broker_address, port=1883, keepalive=20)
+        client.loop_start() #necessary for callbacks and re-connect the mqtt client automatically (usually reconnect every 3 to 6 seconds)
     except Exception as e:
         error = f"MQTT Client: Logging exception as repr: {e!r}"
         write_error_to_file(False, error)
